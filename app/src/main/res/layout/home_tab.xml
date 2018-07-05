@@ -1,0 +1,74 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
+    tools:context="com.example.sodrulaminshaon.ringmodecontroller.HomeTab">
+
+    <Button
+        android:id="@+id/normal"
+        android:layout_width="230dp"
+        android:layout_height="80dp"
+        android:layout_alignEnd="@+id/vibrate"
+        android:layout_alignLeft="@+id/vibrate"
+        android:layout_alignRight="@+id/vibrate"
+        android:layout_alignStart="@+id/vibrate"
+        android:layout_below="@+id/checkbox"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox" />
+
+    <Button
+        android:id="@+id/vibrate"
+        android:layout_width="230dp"
+        android:layout_height="80dp"
+        android:layout_alignEnd="@+id/silent"
+        android:layout_alignLeft="@+id/silent"
+        android:layout_alignRight="@+id/silent"
+        android:layout_alignStart="@+id/silent"
+        android:layout_below="@+id/normal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="vibrate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/normal" />
+
+    <Button
+        android:id="@+id/silent"
+        android:layout_width="230dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/vibrate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="silent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vibrate"
+        app:layout_constraintVertical_bias="0.00" />
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="230dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Auto Control"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
