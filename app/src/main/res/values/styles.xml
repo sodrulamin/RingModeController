@@ -16,5 +16,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="CheckboxStyle" parent="AppTheme">
+        <item name="colorAccent">@color/colorAccent</item>  // for checked
+        <item name="android:textColorSecondary">@color/colorAccent</item>  // for unchecked
+    </style>
+
 
 </resources>

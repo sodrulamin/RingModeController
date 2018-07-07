@@ -36,7 +36,6 @@ public class SilentTab extends Fragment {
     //public static ArrayList<String> wifiList;
     public static SearchView searchView;
     public static ListView lv;
-    public static ArrayAdapter<String> addap;
     public static ImageButton addWifi;
     //public static String popupInput;
     CustomAdapter  adapter;
@@ -54,7 +53,7 @@ public class SilentTab extends Fragment {
 
 
         backGround.setBackgroundColor(Color.CYAN);
-        backGround.setBackground(getResources().getDrawable(R.drawable.background2));
+        backGround.setBackground(getResources().getDrawable(R.drawable.background12));
         /*wifiList.clear();
         wifiList.add("a2");
         wifiList.add("test1");
@@ -82,7 +81,6 @@ public class SilentTab extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                addap.getFilter().filter(s);
                 adapter.getFilter().filter(s);
                 return false;
             }

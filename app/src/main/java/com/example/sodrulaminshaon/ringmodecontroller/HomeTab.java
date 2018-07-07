@@ -1,6 +1,7 @@
 package com.example.sodrulaminshaon.ringmodecontroller;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -48,7 +49,7 @@ public class HomeTab extends Fragment {
         backGround =  rootView.findViewById(R.id.homelayout);
         changeMode(MainActivity.am.getRingerMode());
         backGround.setBackgroundColor(Color.CYAN);
-        backGround.setBackground(getResources().getDrawable(R.drawable.background2));
+        backGround.setBackground(getResources().getDrawable(R.drawable.background12));
 
         /*final SharedPreferences mPrefs = getActivity().getPreferences(MODE_PRIVATE);
         final boolean autoControlMode = mPrefs.getBoolean(Constants.AUTO_CONTROL_STR,false);*/
@@ -97,40 +98,43 @@ public class HomeTab extends Fragment {
         vibrate.setClickable(isClickable);
         silent.setClickable(isClickable);
     }
+    //@SuppressLint("ResourceAsColor")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void changeMode(int index){
-        NotificationManager notificationManager =
-                (NotificationManager) homeTab.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        try {
+            NotificationManager notificationManager =
+                    (NotificationManager) homeTab.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !notificationManager.isNotificationPolicyAccessGranted()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    && !notificationManager.isNotificationPolicyAccessGranted()) {
 
-            Intent intent = new Intent(
-                    android.provider.Settings
-                            .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                Intent intent = new Intent(
+                        android.provider.Settings
+                                .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
 
 
-            homeTab.startActivity(intent);
-        }
+                homeTab.startActivity(intent);
+            }
+        }catch (Exception e){}
 
         MainActivity.am.setRingerMode(index);
         switch (index){
             case AudioManager.RINGER_MODE_NORMAL:
-                normal.setBackgroundColor(Color.rgb(col,col,col));
-                silent.setBackgroundColor(Color.WHITE);
-                vibrate.setBackgroundColor(Color.WHITE);
+                /*normal.setBackgroundColor(R.color.ashblack);
+                silent.setBackgroundColor(R.color.bright_green);
+                vibrate.setBackgroundColor(R.color.bright_green);*/
                 MainActivity.tabLayout.setBackgroundColor(Color.MAGENTA);
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
-                vibrate.setBackgroundColor(Color.rgb(col,col,col));
+                /*vibrate.setBackgroundColor(Color.rgb(col,col,col));
                 normal.setBackgroundColor(Color.WHITE);
-                silent.setBackgroundColor(Color.WHITE);
+                silent.setBackgroundColor(Color.WHITE);*/
                 MainActivity.tabLayout.setBackgroundColor(Color.BLUE);
                 break;
             case AudioManager.RINGER_MODE_SILENT:
-                silent.setBackgroundColor(Color.rgb(col,col,col));
+                /*silent.setBackgroundColor(Color.rgb(col,col,col));
                 normal.setBackgroundColor(Color.WHITE);
-                vibrate.setBackgroundColor(Color.WHITE);
+                vibrate.setBackgroundColor(Color.WHITE);*/
                 MainActivity.tabLayout.setBackgroundColor(Color.BLACK);
                 break;
         }

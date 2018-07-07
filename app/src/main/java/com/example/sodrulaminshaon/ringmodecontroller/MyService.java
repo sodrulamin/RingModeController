@@ -18,6 +18,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -40,21 +41,26 @@ public class MyService extends Service {
     private class WifiCheckerThread extends Thread{
         @Override
         public void run(){
-            SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
-            boolean auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR,false);
-            if(auto)
-            {
-                wifiManager = (WifiManager) service.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                if (!wifiManager.isWifiEnabled())
-                {
-                    startedByService = true;
-                    wifiManager.setWifiEnabled(true);
+            try {
+                SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE);
+                boolean auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR, false);
+                if (auto) {
+                    wifiManager = (WifiManager) service.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    if (!wifiManager.isWifiEnabled()) {
+                        startedByService = true;
+                        wifiManager.setWifiEnabled(true);
+                    } else startedByService = false;
+                    //Log.i(LIST_TESTING,"Wifi is enabled. Now going to check the available list.");
+                    receiverWifi = new WifiReceiver();
+                    //if(!isRegistered(receiverWifi))
+                    try{
+                        registerReceiver(receiverWifi,
+                                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                    }catch (Exception e){}
+                    wifiManager.startScan();
                 }
-                //Log.i(LIST_TESTING,"Wifi is enabled. Now going to check the available list.");
-                receiverWifi = new WifiReceiver();
-                registerReceiver(receiverWifi,
-                        new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-                wifiManager.startScan();
+            }catch (Exception e){
+                e.printStackTrace();
             }
             try{
                 Thread.sleep(10000);
@@ -67,10 +73,14 @@ public class MyService extends Service {
     private class WifiReceiver extends BroadcastReceiver {
 
         public void onReceive(Context c, Intent intent) {
-            int mode = getNewMode();
-            AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
-            am.setRingerMode(mode);
-            HomeTab.changeMode(mode);
+            try {
+                int mode = getNewMode();
+                AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+                am.setRingerMode(mode);
+                if(HomeTab.homeTab != null)HomeTab.changeMode(mode);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
             stopSelf();
         }
