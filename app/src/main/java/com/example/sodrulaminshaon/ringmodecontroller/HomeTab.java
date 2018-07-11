@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class HomeTab extends Fragment {
         backGround =  rootView.findViewById(R.id.homelayout);
         changeMode(MainActivity.am.getRingerMode());
         backGround.setBackgroundColor(Color.CYAN);
-        backGround.setBackground(getResources().getDrawable(R.drawable.background12));
+        backGround.setBackground(getResources().getDrawable(R.drawable.background2));
 
         /*final SharedPreferences mPrefs = getActivity().getPreferences(MODE_PRIVATE);
         final boolean autoControlMode = mPrefs.getBoolean(Constants.AUTO_CONTROL_STR,false);*/
@@ -120,21 +121,21 @@ public class HomeTab extends Fragment {
         MainActivity.am.setRingerMode(index);
         switch (index){
             case AudioManager.RINGER_MODE_NORMAL:
-                /*normal.setBackgroundColor(R.color.ashblack);
-                silent.setBackgroundColor(R.color.bright_green);
-                vibrate.setBackgroundColor(R.color.bright_green);*/
-                MainActivity.tabLayout.setBackgroundColor(Color.MAGENTA);
-                break;
-            case AudioManager.RINGER_MODE_VIBRATE:
-                /*vibrate.setBackgroundColor(Color.rgb(col,col,col));
-                normal.setBackgroundColor(Color.WHITE);
-                silent.setBackgroundColor(Color.WHITE);*/
+                normal.setBackgroundResource(R.drawable.pressed_button);
+                silent.setBackgroundResource(R.drawable.temporary_back);
+                vibrate.setBackgroundResource(R.drawable.temporary_back);
                 MainActivity.tabLayout.setBackgroundColor(Color.BLUE);
                 break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                vibrate.setBackgroundResource(R.drawable.pressed_button);
+                normal.setBackgroundResource(R.drawable.temporary_back);
+                silent.setBackgroundResource(R.drawable.temporary_back);
+                MainActivity.tabLayout.setBackgroundColor(Color.rgb(100,100,100));
+                break;
             case AudioManager.RINGER_MODE_SILENT:
-                /*silent.setBackgroundColor(Color.rgb(col,col,col));
-                normal.setBackgroundColor(Color.WHITE);
-                vibrate.setBackgroundColor(Color.WHITE);*/
+                silent.setBackgroundResource(R.drawable.pressed_button);
+                normal.setBackgroundResource(R.drawable.temporary_back);
+                vibrate.setBackgroundResource(R.drawable.temporary_back);
                 MainActivity.tabLayout.setBackgroundColor(Color.BLACK);
                 break;
         }

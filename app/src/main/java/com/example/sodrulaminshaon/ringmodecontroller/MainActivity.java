@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setText("Manual");
         tabLayout.getTabAt(1).setText("Silent");
         tabLayout.getTabAt(2).setText("Vibration");
-        System.out.println("Test");
-        am= (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+        //System.out.println("Test");
+        am= (AudioManager) activity.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
 
         serviceIntent = new Intent(activity, MyService.class);

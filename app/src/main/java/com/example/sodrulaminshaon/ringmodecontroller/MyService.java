@@ -18,7 +18,6 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -26,16 +25,17 @@ import java.util.Set;
  */
 
 public class MyService extends Service {
-    WifiManager wifiManager;
+    public WifiManager wifiManager;
     WifiReceiver receiverWifi;
-    private static final String LIST_TESTING = "ListTest";
-    private boolean startedByService = true;
+    public static final String LIST_TESTING = "ListTest";
+    public boolean wiifEnabledByService = true;
     MyService service;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         service = this;
         new WifiCheckerThread().start();
+        Log.i(LIST_TESTING,"MyService onStartCommand has been called");
         return START_STICKY;
     }
     private class WifiCheckerThread extends Thread{
@@ -46,17 +46,21 @@ public class MyService extends Service {
                 boolean auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR, false);
                 if (auto) {
                     wifiManager = (WifiManager) service.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    Log.i(LIST_TESTING,"Wifi is enabled now service is going to check the availabe wifi list.");
                     if (!wifiManager.isWifiEnabled()) {
-                        startedByService = true;
+                        wiifEnabledByService = true;
                         wifiManager.setWifiEnabled(true);
-                    } else startedByService = false;
+                    } else wiifEnabledByService = false;
                     //Log.i(LIST_TESTING,"Wifi is enabled. Now going to check the available list.");
                     receiverWifi = new WifiReceiver();
+                    receiverWifi.service = service;
                     //if(!isRegistered(receiverWifi))
                     try{
                         registerReceiver(receiverWifi,
                                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-                    }catch (Exception e){}
+                    }catch (Exception e){
+                        Log.i(LIST_TESTING,e.toString());
+                    }
                     wifiManager.startScan();
                 }
             }catch (Exception e){
@@ -70,12 +74,14 @@ public class MyService extends Service {
         }
     }
 
-    private class WifiReceiver extends BroadcastReceiver {
-
+    /*public class WifiReceiver extends BroadcastReceiver {
+        @Override
         public void onReceive(Context c, Intent intent) {
             try {
+                Log.i(LIST_TESTING,"inside broadcast receiver....");
                 int mode = getNewMode();
-                AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+                Log.i(LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
+                AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
                 am.setRingerMode(mode);
                 if(HomeTab.homeTab != null)HomeTab.changeMode(mode);
             }catch (Exception e){
@@ -84,10 +90,10 @@ public class MyService extends Service {
 
             stopSelf();
         }
-    }
-    private int getNewMode(){
+    }*/
+    /*private int getNewMode(){
         List<ScanResult> wifiList = wifiManager.getScanResults();
-        if(startedByService){
+        if(wiifEnabledByService){
             wifiManager.setWifiEnabled(false);
         }
         HashMap<String,String> availableMap = new HashMap<>();
@@ -95,6 +101,7 @@ public class MyService extends Service {
         for(int i = 0; i < wifiList.size(); i++){
             str = wifiList.get(i).SSID;
             availableMap.put(str,str);
+            Log.i(LIST_TESTING,(i+1)+". "+str);
         }
         SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
         Set<String> silentList = preferences.getStringSet(Constants.SILENT_LIST, null);
@@ -117,7 +124,7 @@ public class MyService extends Service {
         }
         return AudioManager.RINGER_MODE_NORMAL;
 
-    }
+    }*/
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -129,7 +136,7 @@ public class MyService extends Service {
         if(auto)
         {
             if(wifiManager.isWifiEnabled())unregisterReceiver(receiverWifi);
-            if(startedByService){
+            if(wiifEnabledByService){
                 wifiManager.setWifiEnabled(false);
             }
             AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);

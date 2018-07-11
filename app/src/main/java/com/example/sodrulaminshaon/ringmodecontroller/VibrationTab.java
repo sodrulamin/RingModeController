@@ -48,7 +48,7 @@ public class VibrationTab extends Fragment {
         addWifi = rootView.findViewById(R.id.add);
 
         backGround.setBackgroundColor(Color.CYAN);
-        backGround.setBackground(getResources().getDrawable(R.drawable.background12));
+        backGround.setBackground(getResources().getDrawable(R.drawable.background2));
         //Set<String> wifiList = MainActivity.getWifiList(Constants.VIBRATION_LIST);
 
         /*wifiList.clear();

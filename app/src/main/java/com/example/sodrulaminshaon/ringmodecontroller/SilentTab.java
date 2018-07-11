@@ -53,7 +53,7 @@ public class SilentTab extends Fragment {
 
 
         backGround.setBackgroundColor(Color.CYAN);
-        backGround.setBackground(getResources().getDrawable(R.drawable.background12));
+        backGround.setBackground(getResources().getDrawable(R.drawable.background2));
         /*wifiList.clear();
         wifiList.add("a2");
         wifiList.add("test1");
