@@ -20,7 +20,10 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#1ac136" />
+        android:textAlignment="gravity"
+        android:text="test"
+        android:background="@drawable/list_item_background"
+        android:textColor="#e0efe2" />
 
     <ImageButton
         android:id="@+id/delete"
@@ -30,7 +33,8 @@
         android:layout_alignBottom="@+id/name"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:minHeight="40dp"
+        android:background="@drawable/delete_button_background"
+
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 </RelativeLayout>
