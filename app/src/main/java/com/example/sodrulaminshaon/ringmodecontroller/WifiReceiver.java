@@ -22,6 +22,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class WifiReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context c, Intent intent) {
+
+
+
         try {
             Log.i(MyService.LIST_TESTING,"inside broadcast receiver....");
             int mode = getNewMode();

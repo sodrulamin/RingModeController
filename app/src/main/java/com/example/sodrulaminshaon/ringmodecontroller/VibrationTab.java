@@ -2,6 +2,7 @@ package com.example.sodrulaminshaon.ringmodecontroller;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -89,7 +90,11 @@ public class VibrationTab extends Fragment {
         addWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                Intent intent = new Intent(getActivity(),AvailableWifiListView.class);
+                intent.putExtra(Constants.WINDOW_NAME,Constants.VIBRATION_LIST);
+                getActivity().startActivity(intent);
+
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Add New Wifi");
                 final EditText input = new EditText(getContext());
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -113,7 +118,7 @@ public class VibrationTab extends Fragment {
                     }
                 });
 
-                builder.show();
+                builder.show();*/
             }
         });
 

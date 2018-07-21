@@ -9,4 +9,5 @@ public class Constants {
     public static final String VIBRATION_LIST = "VibrationWifiList";
     public static final String SILENT_LIST = "SilentWifiList";
     public static final String PREFERENCE_NAME = "MyPreference";
+    public static final String WINDOW_NAME = "WindowName";
 }
