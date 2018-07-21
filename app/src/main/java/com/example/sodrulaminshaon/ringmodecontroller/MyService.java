@@ -30,6 +30,7 @@ public class MyService extends Service {
     public static final String LIST_TESTING = "ListTest";
     public boolean wiifEnabledByService = true;
     MyService service;
+    private long serviceRunningTime = 10000;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -53,28 +54,31 @@ public class MyService extends Service {
                     } else wiifEnabledByService = false;
                     //Log.i(LIST_TESTING,"Wifi is enabled. Now going to check the available list.");
                     receiverWifi = new WifiReceiver();
-                    receiverWifi.service = service;
+                    //receiverWifi.service = service;
                     //if(!isRegistered(receiverWifi))
+                    Log.i(LIST_TESTING,"Going to register scan receiver");
                     try{
-                        registerReceiver(receiverWifi,
+                        service.registerReceiver(receiverWifi,
                                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                     }catch (Exception e){
                         Log.i(LIST_TESTING,e.toString());
+                        e.printStackTrace();
                     }
+                    Log.i(LIST_TESTING,"Going to start the scan");
                     wifiManager.startScan();
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
             try{
-                Thread.sleep(10000);
+                Thread.sleep(serviceRunningTime);
             }catch (Exception e){}
 
-            stopSelf();
+            service.stopSelf();
         }
     }
 
-    /*public class WifiReceiver extends BroadcastReceiver {
+    public class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context c, Intent intent) {
             try {
@@ -90,8 +94,8 @@ public class MyService extends Service {
 
             stopSelf();
         }
-    }*/
-    /*private int getNewMode(){
+    }
+    private int getNewMode(){
         List<ScanResult> wifiList = wifiManager.getScanResults();
         if(wiifEnabledByService){
             wifiManager.setWifiEnabled(false);
@@ -124,7 +128,7 @@ public class MyService extends Service {
         }
         return AudioManager.RINGER_MODE_NORMAL;
 
-    }*/
+    }
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -135,10 +139,16 @@ public class MyService extends Service {
         boolean auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR,false);
         if(auto)
         {
-            if(wifiManager.isWifiEnabled())unregisterReceiver(receiverWifi);
-            if(wiifEnabledByService){
-                wifiManager.setWifiEnabled(false);
-            }
+            try {
+                unregisterReceiver(receiverWifi);
+
+
+            }catch (Exception e){}
+            try{
+                if(wiifEnabledByService){
+                    wifiManager.setWifiEnabled(false);
+                }
+            }catch (Exception e){}
             AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarm.set(
                     alarm.RTC_WAKEUP,

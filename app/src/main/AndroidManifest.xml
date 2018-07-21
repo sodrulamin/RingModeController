@@ -29,6 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AvailableWifiListView" />
 
         <receiver android:name=".AutoStart">
             <intent-filter>
@@ -37,7 +38,7 @@
         </receiver>
 
         <receiver
-            android:name=".WifiReceiver"
+            android:name=".MyService$WifiReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
