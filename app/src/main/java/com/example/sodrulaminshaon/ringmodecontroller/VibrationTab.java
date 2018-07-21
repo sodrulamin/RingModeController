@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -59,6 +61,18 @@ public class VibrationTab extends Fragment {
         adapter = new CustomAdapter(getContext(),Constants.VIBRATION_LIST);
         lv.setAdapter(adapter);
 
+        /*final View parent = (View) searchView.getParent();  // button: the view you want to enlarge hit area
+        parent.post( new Runnable() {
+            public void run() {
+                final Rect rect = new Rect();
+                searchView.getHitRect(rect);
+                rect.left -= 10;   // increase left hit area
+                rect.right += 100;  // increase right hit area
+                parent.setTouchDelegate( new TouchDelegate( rect , searchView));
+            }
+        });*/
+        searchView.setQueryHint("Search");
+        searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
