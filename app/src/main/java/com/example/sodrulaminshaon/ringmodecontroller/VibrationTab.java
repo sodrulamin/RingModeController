@@ -91,6 +91,7 @@ public class VibrationTab extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(),AvailableWifiListView.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra(Constants.WINDOW_NAME,Constants.VIBRATION_LIST);
                 getActivity().startActivity(intent);
 
