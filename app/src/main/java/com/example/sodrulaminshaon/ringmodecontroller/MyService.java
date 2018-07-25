@@ -25,10 +25,11 @@ import java.util.Set;
  */
 
 public class MyService extends Service {
+    public static HashMap<String,String> availableMap = new HashMap<>();
     public WifiManager wifiManager;
     WifiReceiver receiverWifi;
     public static final String LIST_TESTING = "ListTest";
-    public boolean wiifEnabledByService = true;
+    //public boolean wiifEnabledByService = true;
     MyService service;
     private long serviceRunningTime = 10000;
     @Override
@@ -47,14 +48,14 @@ public class MyService extends Service {
                 boolean auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR, false);
                 if (auto) {
                     wifiManager = (WifiManager) service.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                    Log.i(LIST_TESTING,"Wifi is enabled now service is going to check the availabe wifi list.");
+                    Log.i(LIST_TESTING,"Wifi is enabled now service is going to check the available wifi list.");
                     if (!wifiManager.isWifiEnabled()) {
-                        wiifEnabledByService = true;
+                        WifiReceiver.disableWifi = true;
                         wifiManager.setWifiEnabled(true);
-                    } else wiifEnabledByService = false;
+                    } //else wiifEnabledByService = false;
                     //Log.i(LIST_TESTING,"Wifi is enabled. Now going to check the available list.");
                     receiverWifi = new WifiReceiver();
-                    //receiverWifi.service = service;
+                    receiverWifi.service = service;
                     //if(!isRegistered(receiverWifi))
                     Log.i(LIST_TESTING,"Going to register scan receiver");
                     try{
@@ -74,11 +75,21 @@ public class MyService extends Service {
                 Thread.sleep(serviceRunningTime);
             }catch (Exception e){}
 
+            try {
+                Log.i(LIST_TESTING,"Going to check the mode now");
+                int mode = getNewMode();
+                Log.i(MyService.LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
+                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                am.setRingerMode(mode);
+                if(HomeTab.homeTab != null)HomeTab.changeMode(mode);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             service.stopSelf();
         }
     }
 
-    public class WifiReceiver extends BroadcastReceiver {
+    /*public class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context c, Intent intent) {
             try {
@@ -94,9 +105,9 @@ public class MyService extends Service {
 
             stopSelf();
         }
-    }
+    }*/
     private int getNewMode(){
-        List<ScanResult> wifiList = wifiManager.getScanResults();
+        /*List<ScanResult> wifiList = wifiManager.getScanResults();
         if(wiifEnabledByService){
             wifiManager.setWifiEnabled(false);
         }
@@ -106,7 +117,9 @@ public class MyService extends Service {
             str = wifiList.get(i).SSID;
             availableMap.put(str,str);
             Log.i(LIST_TESTING,(i+1)+". "+str);
-        }
+        }*/
+        //if(WifiReceiver.availableMap == null)return AudioManager.RINGER_MODE_NORMAL;
+        //HashMap<String,String> availableMap =WifiReceiver.availableMap;
         SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
         Set<String> silentList = preferences.getStringSet(Constants.SILENT_LIST, null);
         if (silentList == null) {
@@ -145,14 +158,15 @@ public class MyService extends Service {
 
             }catch (Exception e){}
             try{
-                if(wiifEnabledByService){
+                if(WifiReceiver.disableWifi){
+                    WifiReceiver.disableWifi = false;
                     wifiManager.setWifiEnabled(false);
                 }
             }catch (Exception e){}
             AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarm.set(
                     alarm.RTC_WAKEUP,
-                    System.currentTimeMillis() + (1000 * 60),
+                    System.currentTimeMillis() + (1000 * 50),
                     PendingIntent.getService(this, 0, new Intent(this, MyService.class), 0)
             );
         }

@@ -37,7 +37,7 @@ public class VibrationTab extends Fragment {
     public static SearchView searchView;
     public static ListView lv;
     public static ImageButton addWifi;
-    CustomAdapter  adapter;
+    public static CustomAdapter  adapter;
     /*public static ArrayList<String> wifiList;
     static{
         wifiList = new ArrayList<>();
@@ -50,7 +50,7 @@ public class VibrationTab extends Fragment {
         searchView = rootView.findViewById(R.id.searchView);
         addWifi = rootView.findViewById(R.id.add);
 
-        backGround.setBackgroundColor(Color.CYAN);
+        //backGround.setBackgroundColor(Color.CYAN);
         backGround.setBackground(getResources().getDrawable(R.drawable.background2));
         //Set<String> wifiList = MainActivity.getWifiList(Constants.VIBRATION_LIST);
 

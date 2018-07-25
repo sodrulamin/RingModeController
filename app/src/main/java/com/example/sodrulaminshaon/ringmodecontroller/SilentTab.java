@@ -3,6 +3,7 @@ package com.example.sodrulaminshaon.ringmodecontroller;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -38,7 +39,7 @@ public class SilentTab extends Fragment {
     public static ListView lv;
     public static ImageButton addWifi;
     //public static String popupInput;
-    CustomAdapter  adapter;
+    public static CustomAdapter  adapter;
 
     /*static{
         wifiList = new ArrayList<>();
@@ -89,8 +90,12 @@ public class SilentTab extends Fragment {
         addWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),AvailableWifiListView.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putExtra(Constants.WINDOW_NAME,Constants.SILENT_LIST);
+                getActivity().startActivity(intent);
                 //popupInput = null;
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Add New Wifi");
                 final EditText input = new EditText(getContext());
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -112,7 +117,7 @@ public class SilentTab extends Fragment {
                     }
                 });
 
-                builder.show();
+                builder.show();*/
             }
         });
 

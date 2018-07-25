@@ -109,7 +109,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(c);
-                builder.setTitle("Add New Wifi");
+                builder.setTitle("Change Wifi Name");
                 final EditText input = new EditText(c);
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 input.setText(name);

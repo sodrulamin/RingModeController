@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -30,24 +31,28 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:layout_marginStart="29dp"
+        android:background="@drawable/temporary_back"
         android:text="Add"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cancel"
-        app:layout_constraintTop_toBottomOf="@+id/wifiListView"
-        android:layout_marginLeft="29dp" />
+        app:layout_constraintTop_toBottomOf="@+id/wifiListView" />
 
     <Button
         android:id="@+id/cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="29dp"
+        android:background="@drawable/temporary_back"
         android:text="cancel"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wifiListView"
-        android:layout_marginRight="29dp" />
+        app:layout_constraintTop_toBottomOf="@+id/wifiListView" />
 
     <EditText
         android:id="@+id/editText"
@@ -58,7 +63,6 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:singleLine="false"
-        android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/wifiListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

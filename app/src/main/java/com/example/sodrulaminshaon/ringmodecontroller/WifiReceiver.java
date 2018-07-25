@@ -20,12 +20,28 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class WifiReceiver extends BroadcastReceiver {
+
+    public static boolean disableWifi = false;
     @Override
     public void onReceive(Context c, Intent intent) {
 
+        List<ScanResult> wifiList = service.wifiManager.getScanResults();
 
+        MyService.availableMap.clear();
+        String str;
+        for(int i = 0; i < wifiList.size(); i++){
+            str = wifiList.get(i).SSID;
+            if(str != null && str.length()>0){
+                MyService.availableMap.put(str,str);
+                Log.i(MyService.LIST_TESTING,(i+1)+". "+str);
+            }
+        }
+        if(disableWifi){
+            service.wifiManager.setWifiEnabled(false);
+            disableWifi = false;
+        }
 
-        try {
+        /*try {
             Log.i(MyService.LIST_TESTING,"inside broadcast receiver....");
             int mode = getNewMode();
             Log.i(MyService.LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
@@ -36,11 +52,11 @@ public class WifiReceiver extends BroadcastReceiver {
             e.printStackTrace();
         }
 
-        service.stopSelf();
+        service.stopSelf();*/
     }
     public MyService service;
 
-    private int getNewMode(){
+    /*private int getNewMode(){
         List<ScanResult> wifiList = service.wifiManager.getScanResults();
         if(service.wiifEnabledByService){
             service.wifiManager.setWifiEnabled(false);
@@ -73,5 +89,5 @@ public class WifiReceiver extends BroadcastReceiver {
         }
         return AudioManager.RINGER_MODE_NORMAL;
 
-    }
+    }*/
 }
