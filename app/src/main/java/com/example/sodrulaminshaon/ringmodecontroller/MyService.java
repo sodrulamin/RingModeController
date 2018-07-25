@@ -120,8 +120,10 @@ public class MyService extends Service {
         }*/
         //if(WifiReceiver.availableMap == null)return AudioManager.RINGER_MODE_NORMAL;
         //HashMap<String,String> availableMap =WifiReceiver.availableMap;
+        Log.i(LIST_TESTING,"Inside getmode method. Avilable map size: "+availableMap.size());
         SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
         Set<String> silentList = preferences.getStringSet(Constants.SILENT_LIST, null);
+
         if (silentList == null) {
             silentList = new HashSet<>();
         }
@@ -154,9 +156,9 @@ public class MyService extends Service {
         {
             try {
                 unregisterReceiver(receiverWifi);
-
-
-            }catch (Exception e){}
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             try{
                 if(WifiReceiver.disableWifi){
                     WifiReceiver.disableWifi = false;

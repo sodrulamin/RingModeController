@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -24,9 +25,31 @@ public class WifiReceiver extends BroadcastReceiver {
     public static boolean disableWifi = false;
     @Override
     public void onReceive(Context c, Intent intent) {
+        if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+            List<ScanResult> wifiList = service.wifiManager.getScanResults();
+            Log.i(MyService.LIST_TESTING,"Inside wifi scan receiver size = "+wifiList.size());
+            MyService.availableMap.clear();
+            String str;
+            for(int i = 0; i < wifiList.size(); i++){
+                str = wifiList.get(i).SSID;
+                if(str != null && str.length()>0){
+                    MyService.availableMap.put(str,str);
+                    Log.i(MyService.LIST_TESTING,(i+1)+". "+str);
+                }
+            }
+            if(disableWifi){
+                service.wifiManager.setWifiEnabled(false);
+                disableWifi = false;
+            }
+        }
+    }
+    /*@Override
+    public void onReceive(Context c, Intent intent) {
+
+
 
         List<ScanResult> wifiList = service.wifiManager.getScanResults();
-
+        Log.i(MyService.LIST_TESTING,"Inside wifi scan receiver size = "+wifiList.size());
         MyService.availableMap.clear();
         String str;
         for(int i = 0; i < wifiList.size(); i++){
@@ -41,7 +64,7 @@ public class WifiReceiver extends BroadcastReceiver {
             disableWifi = false;
         }
 
-        /*try {
+        *//*try {
             Log.i(MyService.LIST_TESTING,"inside broadcast receiver....");
             int mode = getNewMode();
             Log.i(MyService.LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
@@ -52,8 +75,8 @@ public class WifiReceiver extends BroadcastReceiver {
             e.printStackTrace();
         }
 
-        service.stopSelf();*/
-    }
+        service.stopSelf();*//*
+    }*/
     public MyService service;
 
     /*private int getNewMode(){
