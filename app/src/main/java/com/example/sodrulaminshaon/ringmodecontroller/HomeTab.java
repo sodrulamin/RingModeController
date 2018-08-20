@@ -124,6 +124,7 @@ public class HomeTab extends Fragment {
                 normal.setBackgroundResource(R.drawable.pressed_button);
                 silent.setBackgroundResource(R.drawable.temporary_back);
                 vibrate.setBackgroundResource(R.drawable.temporary_back);
+
                 MainActivity.tabLayout.setBackgroundColor(Color.BLUE);
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:

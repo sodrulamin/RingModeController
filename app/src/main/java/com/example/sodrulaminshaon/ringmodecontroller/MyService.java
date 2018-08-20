@@ -4,7 +4,6 @@ package com.example.sodrulaminshaon.ringmodecontroller;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Created by Sodrul Amin Shaon on 22-Jun-18.
@@ -27,45 +27,47 @@ import java.util.Set;
 public class MyService extends Service {
     public static HashMap<String,String> availableMap = new HashMap<>();
     public WifiManager wifiManager;
+    public LinkedBlockingDeque<WifiManager> registeredWifiManagerQueue;
     WifiReceiver receiverWifi;
-    public static final String LIST_TESTING = "ListTest";
+    public static final String logger = "MyService";
     //public boolean wiifEnabledByService = true;
     MyService service;
-    private long serviceRunningTime = 10000;
+    private long serviceRunningTime = 5000;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        registeredWifiManagerQueue = new LinkedBlockingDeque<>();
         service = this;
         new WifiCheckerThread().start();
-        Log.i(LIST_TESTING,"MyService onStartCommand has been called");
+        Log.i(logger,"MyService onStartCommand has been called");
         return START_STICKY;
     }
     private class WifiCheckerThread extends Thread{
         @Override
         public void run(){
+            boolean auto;
             try {
                 SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE);
-                boolean auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR, false);
+                auto = preferences.getBoolean(Constants.AUTO_CONTROL_STR, false);
                 if (auto) {
                     wifiManager = (WifiManager) service.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                    Log.i(LIST_TESTING,"Wifi is enabled now service is going to check the available wifi list.");
+                    Log.i(logger,"Wifi is enabled now service is going to check the available wifi list.");
                     if (!wifiManager.isWifiEnabled()) {
                         WifiReceiver.disableWifi = true;
                         wifiManager.setWifiEnabled(true);
                     } //else wiifEnabledByService = false;
-                    //Log.i(LIST_TESTING,"Wifi is enabled. Now going to check the available list.");
+                    //Log.i(logger,"Wifi is enabled. Now going to check the available list.");
                     receiverWifi = new WifiReceiver();
                     receiverWifi.service = service;
                     //if(!isRegistered(receiverWifi))
-                    Log.i(LIST_TESTING,"Going to register scan receiver");
+                    Log.i(logger,"Going to register scan receiver");
                     try{
                         service.registerReceiver(receiverWifi,
                                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                     }catch (Exception e){
-                        Log.i(LIST_TESTING,e.toString());
+                        Log.i(logger,e.toString());
                         e.printStackTrace();
                     }
-                    Log.i(LIST_TESTING,"Going to start the scan");
+                    Log.i(logger,"Going to start the scan");
                     wifiManager.startScan();
                 }
             }catch (Exception e){
@@ -76,9 +78,30 @@ public class MyService extends Service {
             }catch (Exception e){}
 
             try {
-                Log.i(LIST_TESTING,"Going to check the mode now");
+                //if (intent != null && intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+                if(wifiManager != null && wifiManager.isWifiEnabled())
+                {
+
+                    List<ScanResult> wifiList = service.wifiManager.getScanResults();
+                    Log.i(MyService.logger, "Inside wifi scan receiver size = " + wifiList.size());
+                    MyService.availableMap.clear();
+                    String str;
+                    for (int i = 0; i < wifiList.size(); i++) {
+                        str = wifiList.get(i).SSID;
+                        if (str != null && str.length() > 0) {
+                            MyService.availableMap.put(str, str);
+                            Log.i(MyService.logger, (i + 1) + ". " + str);
+                        }
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            try {
+                Log.i(logger,"Going to check the mode now");
                 int mode = getNewMode();
-                Log.i(MyService.LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
+                Log.i(MyService.logger,"Mode found in broadcast Receiver is "+mode);
                 AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 am.setRingerMode(mode);
                 if(HomeTab.homeTab != null)HomeTab.changeMode(mode);
@@ -93,9 +116,9 @@ public class MyService extends Service {
         @Override
         public void onReceive(Context c, Intent intent) {
             try {
-                Log.i(LIST_TESTING,"inside broadcast receiver....");
+                Log.i(logger,"inside broadcast receiver....");
                 int mode = getNewMode();
-                Log.i(LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
+                Log.i(logger,"Mode found in broadcast Receiver is "+mode);
                 AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
                 am.setRingerMode(mode);
                 if(HomeTab.homeTab != null)HomeTab.changeMode(mode);
@@ -116,11 +139,11 @@ public class MyService extends Service {
         for(int i = 0; i < wifiList.size(); i++){
             str = wifiList.get(i).SSID;
             availableMap.put(str,str);
-            Log.i(LIST_TESTING,(i+1)+". "+str);
+            Log.i(logger,(i+1)+". "+str);
         }*/
         //if(WifiReceiver.availableMap == null)return AudioManager.RINGER_MODE_NORMAL;
         //HashMap<String,String> availableMap =WifiReceiver.availableMap;
-        Log.i(LIST_TESTING,"Inside getmode method. Avilable map size: "+availableMap.size());
+        Log.i(logger,"Inside getmode method. Avilable map size: "+availableMap.size());
         SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
         Set<String> silentList = preferences.getStringSet(Constants.SILENT_LIST, null);
 
@@ -166,8 +189,7 @@ public class MyService extends Service {
                 }
             }catch (Exception e){}
             AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarm.set(
-                    alarm.RTC_WAKEUP,
+            alarm.set(alarm.RTC_WAKEUP,
                     System.currentTimeMillis() + (1000 * 50),
                     PendingIntent.getService(this, 0, new Intent(this, MyService.class), 0)
             );

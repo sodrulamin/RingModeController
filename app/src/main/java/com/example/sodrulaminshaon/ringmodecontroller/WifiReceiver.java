@@ -23,24 +23,30 @@ import static android.content.Context.MODE_PRIVATE;
 public class WifiReceiver extends BroadcastReceiver {
 
     public static boolean disableWifi = false;
+    public static String logger = "WifiReceiver";
     @Override
     public void onReceive(Context c, Intent intent) {
-        if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-            List<ScanResult> wifiList = service.wifiManager.getScanResults();
-            Log.i(MyService.LIST_TESTING,"Inside wifi scan receiver size = "+wifiList.size());
-            MyService.availableMap.clear();
-            String str;
-            for(int i = 0; i < wifiList.size(); i++){
-                str = wifiList.get(i).SSID;
-                if(str != null && str.length()>0){
-                    MyService.availableMap.put(str,str);
-                    Log.i(MyService.LIST_TESTING,(i+1)+". "+str);
+        try {
+            if (intent != null && intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+
+                List<ScanResult> wifiList = service.wifiManager.getScanResults();
+                Log.i(logger, "Inside wifi scan receiver size = " + wifiList.size());
+                MyService.availableMap.clear();
+                String str;
+                for (int i = 0; i < wifiList.size(); i++) {
+                    str = wifiList.get(i).SSID;
+                    if (str != null && str.length() > 0) {
+                        MyService.availableMap.put(str, str);
+                        Log.i(logger, (i + 1) + ". " + str);
+                    }
                 }
             }
-            if(disableWifi){
-                service.wifiManager.setWifiEnabled(false);
-                disableWifi = false;
-            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (disableWifi) {
+            service.wifiManager.setWifiEnabled(false);
+            disableWifi = false;
         }
     }
     /*@Override
@@ -49,14 +55,14 @@ public class WifiReceiver extends BroadcastReceiver {
 
 
         List<ScanResult> wifiList = service.wifiManager.getScanResults();
-        Log.i(MyService.LIST_TESTING,"Inside wifi scan receiver size = "+wifiList.size());
+        Log.i(MyService.logger,"Inside wifi scan receiver size = "+wifiList.size());
         MyService.availableMap.clear();
         String str;
         for(int i = 0; i < wifiList.size(); i++){
             str = wifiList.get(i).SSID;
             if(str != null && str.length()>0){
                 MyService.availableMap.put(str,str);
-                Log.i(MyService.LIST_TESTING,(i+1)+". "+str);
+                Log.i(MyService.logger,(i+1)+". "+str);
             }
         }
         if(disableWifi){
@@ -65,9 +71,9 @@ public class WifiReceiver extends BroadcastReceiver {
         }
 
         *//*try {
-            Log.i(MyService.LIST_TESTING,"inside broadcast receiver....");
+            Log.i(MyService.logger,"inside broadcast receiver....");
             int mode = getNewMode();
-            Log.i(MyService.LIST_TESTING,"Mode found in broadcast Receiver is "+mode);
+            Log.i(MyService.logger,"Mode found in broadcast Receiver is "+mode);
             AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
             am.setRingerMode(mode);
             if(HomeTab.homeTab != null)HomeTab.changeMode(mode);
@@ -89,7 +95,7 @@ public class WifiReceiver extends BroadcastReceiver {
         for(int i = 0; i < wifiList.size(); i++){
             str = wifiList.get(i).SSID;
             availableMap.put(str,str);
-            Log.i(MyService.LIST_TESTING,(i+1)+". "+str);
+            Log.i(MyService.logger,(i+1)+". "+str);
         }
         SharedPreferences preferences = service.getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
         Set<String> silentList = preferences.getStringSet(Constants.SILENT_LIST, null);

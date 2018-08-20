@@ -31,7 +31,7 @@ public class AvailableWifiListView extends AppCompatActivity {
     private ListView listView;
     ConstraintLayout backGround;
     private EditText selectedWifi;
-
+    private static final String logger = "AvailableWifiListView";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class AvailableWifiListView extends AppCompatActivity {
                             listAddapter.listOfWifi.add(str);
                         }
                     }
-                    Log.i(MyService.LIST_TESTING,"Current text = "+s);
+                    Log.i(logger,"Current text = "+s);
                 }else{
                     listAddapter.listOfWifi.clear();
                     for(String str: listAddapter.baseList){

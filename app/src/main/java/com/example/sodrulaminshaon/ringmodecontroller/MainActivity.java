@@ -100,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             return true;
+        }else if(id == R.id.action_about){
+            Intent intent = new Intent(activity,ActionAboutActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.getApplicationContext().startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
