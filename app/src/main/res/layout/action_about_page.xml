@@ -27,7 +27,7 @@
             android:layout_marginEnd="9dp"
             android:layout_marginStart="7dp"
             android:layout_marginTop="5dp"
-            android:text='This app is developed by Piashy Rahman and supervised by respected teacher "ABCD". App was build as term project in undergrad school.'
+            android:text='This app is developed by Piashy Rahman and supervised by respected teacher Md. Shariful Islam. App was build as term project in undergrad school.'
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@color/green_temp"
@@ -35,7 +35,9 @@
             app:layout_constraintBottom_toTopOf="@+id/version_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="9dp" />
 
         <TextView
             android:id="@+id/version_view"

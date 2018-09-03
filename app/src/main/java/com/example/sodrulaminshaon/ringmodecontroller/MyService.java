@@ -190,9 +190,14 @@ public class MyService extends Service {
             }catch (Exception e){}
             AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarm.set(alarm.RTC_WAKEUP,
-                    System.currentTimeMillis() + (1000 * 50),
+                    System.currentTimeMillis() + (1000 * 60 * getIntervalTime()),
                     PendingIntent.getService(this, 0, new Intent(this, MyService.class), 0)
             );
         }
+    }
+    public int getIntervalTime(){
+        SharedPreferences mPrefs = getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
+        int interval = mPrefs.getInt(Constants.INTERVAL,1);
+        return interval;
     }
 }

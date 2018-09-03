@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(activity,ActionSettingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.getApplicationContext().startActivity(intent);
             return true;
         }else if(id == R.id.action_about){
             Intent intent = new Intent(activity,ActionAboutActivity.class);
@@ -212,6 +215,17 @@ public class MainActivity extends AppCompatActivity {
         HomeTab.changeButtonStatus(!flag);
         if(flag) startService();
         else stopService();
+    }
+    public static int getIntervalTime(){
+        SharedPreferences mPrefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
+        int interval = mPrefs.getInt(Constants.INTERVAL,1);
+        return interval;
+    }
+    public static void setIntervalTime(int minute){
+        SharedPreferences mPrefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putInt(Constants.INTERVAL,minute);
+        prefsEditor.commit();
     }
 
     private void getPermission(){

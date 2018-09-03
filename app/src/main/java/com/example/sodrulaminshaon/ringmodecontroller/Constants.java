@@ -10,4 +10,5 @@ public class Constants {
     public static final String SILENT_LIST = "SilentWifiList";
     public static final String PREFERENCE_NAME = "MyPreference";
     public static final String WINDOW_NAME = "WindowName";
+    public static final String INTERVAL = "IntervalTime";
 }
