@@ -55,23 +55,8 @@ public class SilentTab extends Fragment {
 
         backGround.setBackgroundColor(Color.CYAN);
         backGround.setBackground(getResources().getDrawable(R.drawable.background2));
-        /*wifiList.clear();
-        wifiList.add("a2");
-        wifiList.add("test1");
-        wifiList.add("This_is_long_text_to_see_if_it_gets_multiline_in_textview._So_that_the_wifi_name_len_can_be_long");
-        wifiList.add("SilentOn");
-        wifiList.add("ClassRoom");
-        wifiList.add("This is long text to see if it gets multiline in textview. So that the wifi name len can be long");
-        String[] array = new String[wifiList.size()];
-        for(int i=0;i<wifiList.size();i++){
-            array[i]=wifiList.get(i);
-        }*/
-        //HashSet<String> wifiList = MainActivity.getWifiList(Constants.SILENT_LIST);
         lv= (ListView) rootView.findViewById(R.id.wifiListView);
-        //addap = new ArrayAdapter<String>(getContext(), R.layout.wifi_list_item, R.id.name, array);
-        //addap = new ArrayAdapter<String>(getContext(), R.layout.simple_list_item, R.id.name, array);
         adapter = new CustomAdapter(getContext(),Constants.SILENT_LIST);
-        //lv.setAdapter(addap);
         lv.setAdapter(adapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -3,12 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/about_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -21,13 +22,13 @@
         <TextView
             android:id="@+id/textView"
             style="@android:style/Widget.DeviceDefault.TextView"
-            android:layout_width="352dp"
-            android:layout_height="220dp"
-            android:layout_marginBottom="38dp"
-            android:layout_marginEnd="9dp"
-            android:layout_marginStart="7dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
-            android:text='This app is developed by Piashy Rahman and supervised by respected teacher Md. Shariful Islam. App was build as term project in undergrad school.'
+            android:text='This app is developed by Mst. Piashy Khatun and supervised by respected teacher Dr. Md. Shariful Islam. App was build as term project in undergrad school.'
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@color/green_temp"
@@ -35,9 +36,7 @@
             app:layout_constraintBottom_toTopOf="@+id/version_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="9dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/version_view"
@@ -60,7 +59,7 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="87dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="37dp"

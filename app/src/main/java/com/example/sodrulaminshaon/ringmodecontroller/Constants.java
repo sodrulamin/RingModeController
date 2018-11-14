@@ -11,4 +11,5 @@ public class Constants {
     public static final String PREFERENCE_NAME = "MyPreference";
     public static final String WINDOW_NAME = "WindowName";
     public static final String INTERVAL = "IntervalTime";
+    public static final String LOG_EVENTS = "LogEvents";
 }

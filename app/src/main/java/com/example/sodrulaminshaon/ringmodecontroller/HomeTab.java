@@ -1,18 +1,14 @@
 package com.example.sodrulaminshaon.ringmodecontroller;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -32,7 +27,7 @@ public class HomeTab extends Fragment {
     private static Button normal,vibrate,silent;
     public static ConstraintLayout backGround;
     private static final int col = 100;
-    public static CheckBox autoControl;
+    public static CheckBox autoMode;
     public static HomeTab homeTab;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +37,7 @@ public class HomeTab extends Fragment {
         normal = (Button) rootView.findViewById(R.id.normal);
         vibrate = (Button) rootView.findViewById(R.id.vibrate);
         silent = (Button) rootView.findViewById(R.id.silent);
-        autoControl = (CheckBox) rootView.findViewById(R.id.checkbox);
+        autoMode = (CheckBox) rootView.findViewById(R.id.checkbox);
 
 
 
@@ -55,7 +50,7 @@ public class HomeTab extends Fragment {
         /*final SharedPreferences mPrefs = getActivity().getPreferences(MODE_PRIVATE);
         final boolean autoControlMode = mPrefs.getBoolean(Constants.AUTO_CONTROL_STR,false);*/
         boolean autoControlMode = MainActivity.getAutoControl();
-        autoControl.setChecked(autoControlMode);
+        autoMode.setChecked(autoControlMode);
 
         //final SharedPreferences.Editor prefsEditor = mPrefs.edit();
 
@@ -81,14 +76,11 @@ public class HomeTab extends Fragment {
                 changeMode(AudioManager.RINGER_MODE_NORMAL);
             }
         });
-        autoControl.setOnClickListener(new View.OnClickListener(){
+        autoMode.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                /*prefsEditor.putBoolean(Constants.AUTO_CONTROL_STR,autoControl.isChecked());
-                prefsEditor.commit();
-                changeButtonStatus(!autoControl.isChecked());*/
-                setAutoControl(autoControl.isChecked());
-                MainActivity.setAutoControl(autoControl.isChecked());
+                setAutoMode(autoMode.isChecked());
+                MainActivity.setAutoControl(autoMode.isChecked());
             }
         });
         changeButtonStatus(!autoControlMode);
@@ -141,11 +133,12 @@ public class HomeTab extends Fragment {
                 break;
         }
     }
-    public void setAutoControl(Boolean flag){
+    public void setAutoMode(Boolean flag){
         SharedPreferences preferences = getActivity().getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = preferences.edit();
         prefEditor.putBoolean(Constants.AUTO_CONTROL_STR,flag);
         prefEditor.commit();
+        prefEditor.apply();
     }
 
 

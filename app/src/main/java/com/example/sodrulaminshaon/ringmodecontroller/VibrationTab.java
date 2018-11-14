@@ -38,10 +38,6 @@ public class VibrationTab extends Fragment {
     public static ListView lv;
     public static ImageButton addWifi;
     public static CustomAdapter  adapter;
-    /*public static ArrayList<String> wifiList;
-    static{
-        wifiList = new ArrayList<>();
-    }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,28 +46,11 @@ public class VibrationTab extends Fragment {
         searchView = rootView.findViewById(R.id.searchView);
         addWifi = rootView.findViewById(R.id.add);
 
-        //backGround.setBackgroundColor(Color.CYAN);
         backGround.setBackground(getResources().getDrawable(R.drawable.background2));
-        //Set<String> wifiList = MainActivity.getWifiList(Constants.VIBRATION_LIST);
-
-        /*wifiList.clear();
-        for(int i=0;i<20;i++)
-            wifiList.add("ReveSystems_"+i);*/
 
         lv= (ListView) rootView.findViewById(R.id.wifiListView);
         adapter = new CustomAdapter(getContext(),Constants.VIBRATION_LIST);
         lv.setAdapter(adapter);
-
-        /*final View parent = (View) searchView.getParent();  // button: the view you want to enlarge hit area
-        parent.post( new Runnable() {
-            public void run() {
-                final Rect rect = new Rect();
-                searchView.getHitRect(rect);
-                rect.left -= 10;   // increase left hit area
-                rect.right += 100;  // increase right hit area
-                parent.setTouchDelegate( new TouchDelegate( rect , searchView));
-            }
-        });*/
         searchView.setQueryHint("Search");
         searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -95,31 +74,6 @@ public class VibrationTab extends Fragment {
                 intent.putExtra(Constants.WINDOW_NAME,Constants.VIBRATION_LIST);
                 getActivity().startActivity(intent);
 
-                /*AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Add New Wifi");
-                final EditText input = new EditText(getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String inputString = input.getText().toString();
-                        if(inputString != null && inputString.length()>0) {
-                            MainActivity.addWifiToTheList(Constants.VIBRATION_LIST, inputString);
-                            adapter.refreshAdapter();
-                        }
-                    }
-                });
-
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();*/
             }
         });
 

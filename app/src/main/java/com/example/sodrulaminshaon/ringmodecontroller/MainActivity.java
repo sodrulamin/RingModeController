@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public static AudioManager am;
     public static MainActivity activity;
     private static Intent serviceIntent;
-    private final static int LOCATION_PERMISSION_REQUEST_CODE = 120;
+    private final static int LOCATION_PERMISSION_REQUEST_CODE = 120,EXTERNAL_STORAGE_WRITING_REQUEST_CODE = 121;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.image_name_2);  ////// this is for icon beside tab name
         tabLayout.getTabAt(2).setIcon(R.drawable.image_name_3);*/
 
-        tabLayout.getTabAt(0).setText("Manual");
+        tabLayout.getTabAt(0).setText("Home");
         tabLayout.getTabAt(1).setText("Silent");
         tabLayout.getTabAt(2).setText("Vibration");
         //System.out.println("Test");
@@ -80,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
         serviceIntent = new Intent(activity, MyService.class);
         startService();
+
     }
     public static void startService(){
+        MyService.logEvents = getLogEvent();
         activity.getApplicationContext().startService(serviceIntent);
     }
     public static void stopService(){
@@ -212,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         prefsEditor.putBoolean(Constants.AUTO_CONTROL_STR,flag);
         prefsEditor.commit();
+        prefsEditor.apply();
         HomeTab.changeButtonStatus(!flag);
         if(flag) startService();
         else stopService();
@@ -226,6 +229,19 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         prefsEditor.putInt(Constants.INTERVAL,minute);
         prefsEditor.commit();
+        prefsEditor.apply();
+    }
+    public static boolean getLogEvent(){
+        SharedPreferences mPrefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
+        boolean logEvent = mPrefs.getBoolean(Constants.LOG_EVENTS,false);
+        return logEvent;
+    }
+    public static void setLogEvent(boolean logEvent){
+        SharedPreferences mPrefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME,MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putBoolean(Constants.LOG_EVENTS,logEvent);
+        prefsEditor.commit();
+        prefsEditor.apply();
     }
 
     private void getPermission(){
@@ -235,6 +251,15 @@ public class MainActivity extends AppCompatActivity {
                 &&
                 ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            askForLocationPermissions();
+        }
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                &&
+                ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
             askForLocationPermissions();
         }
@@ -265,6 +290,32 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            new android.support.v7.app.AlertDialog.Builder(this)
+                    .setTitle("External storage writing permessions needed")
+                    .setMessage("you need to allow this permission!")
+                    .setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    EXTERNAL_STORAGE_WRITING_REQUEST_CODE);
+                        }
+                    })
+                    .setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {}
+                    })
+                    .show();
+
+
+        } else {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    EXTERNAL_STORAGE_WRITING_REQUEST_CODE);
+        }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -272,7 +323,13 @@ public class MainActivity extends AppCompatActivity {
             case LOCATION_PERMISSION_REQUEST_CODE:
                 if (isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 } else {
-                    Toast.makeText(this, "Can not proceed! i need permission" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Can not proceed! I need permission" , Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case EXTERNAL_STORAGE_WRITING_REQUEST_CODE:
+                if (isPermissionGranted(permissions, grantResults, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                } else {
+                    Toast.makeText(this, "Can not proceed! I need permission" , Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
