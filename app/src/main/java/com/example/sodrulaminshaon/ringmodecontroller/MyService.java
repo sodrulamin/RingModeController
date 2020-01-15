@@ -31,9 +31,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.LinkedBlockingDeque;
 
-/**
- * Created by Sodrul Amin Shaon on 22-Jun-18.
- */
+
 
 public class MyService extends Service {
     public static HashMap<String,String> availableMap = new HashMap<>();
